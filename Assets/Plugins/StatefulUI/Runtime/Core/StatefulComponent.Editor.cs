@@ -134,11 +134,13 @@ namespace StatefulUI.Runtime.Core
                 Images.Add(new ImageReference { Role = 0, Image = component, });
             }
             
-            foreach (var component in GetComponentsInChildren<GameObject>(true))
+            // Get all Transforms and use their GameObjects for ObjectReference
+            foreach (var transformRef in GetComponentsInChildren<Transform>(true))
             {
-                if (Objects.Any(reference => reference.Object == component)) continue;
-                if (!IsChildOfThis(component.transform)) continue;
-                Objects.Add(new ObjectReference { Role = 0, Object = component, });
+                var gameObject = transformRef.gameObject;
+                if (Objects.Any(reference => reference.Object == gameObject)) continue;
+                if (!IsChildOfThis(transformRef)) continue;
+                Objects.Add(new ObjectReference { Role = 0, Object = gameObject, });
             }
             
             for (var index = Texts.Count - 1; index >= 0; index--)
